@@ -12,43 +12,37 @@ public class Main {
 
     public static Set<Character> findUniqueLetters(String[] words) {
         Set<Character> uniqueLetters = new HashSet<>();
-
-        // Знаходимо перші два слова, в яких кожна літера трапляється парну кількість разів
         int count = 0;
-        for (int i = 0; i < words.length && count < 2; i++) {
-            String word = words[i];
-            count = 0;
-            for (int j = 0; j < word.length(); j++) {
-                char ch = word.charAt(j);
-                int letterCount = countOccurrences(word, ch);
-                if (letterCount % 2 != 0) {
-                    count = 0;
-                    break;
-                }
-                count++;
-            }
-        }
 
-        // Знаходимо набір унікальних символів у словах
-        if (count >= 2) {
-            for (String word : words) {
-                char[] chars = word.toCharArray();
-                for (char ch : chars) {
-                    uniqueLetters.add(ch);
+        for (String word : words) {
+            if (hasEvenCharacterCount(word)) {
+                count++;
+                for (char c : word.toCharArray()) {
+                    uniqueLetters.add(c);
                 }
+            }
+            if (count == 2) {
+                break;
             }
         }
 
         return uniqueLetters;
     }
 
-    private static int countOccurrences(String word, char target) {
-        int count = 0;
-        for (int i = 0; i < word.length(); i++) {
-            if (word.charAt(i) == target) {
-                count++;
+
+// метод hasEvenCharacterCount перевіряє, чи кожен символ у слові має парну кількість входжень, використовуючи множину uniqueCharacters
+    private static boolean hasEvenCharacterCount(String word) {
+        Set<Character> uniqueCharacters = new HashSet<>();
+
+        for (char c : word.toCharArray()) {
+            if (uniqueCharacters.contains(c)){
+                uniqueCharacters.remove(c);
+            }else {
+                uniqueCharacters.add(c);
             }
+
         }
-        return count;
+        return uniqueCharacters.isEmpty();
+
     }
 }
